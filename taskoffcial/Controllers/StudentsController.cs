@@ -14,20 +14,41 @@ namespace taskoffcial.Controllers
         }
         public IActionResult Index()
         {
-            var result = _context.students.ToList();
+            var result = _context.Students.ToList();
             return View(result);
         }
         public IActionResult Create()
         {
+            ViewBag.Subjects = _context.Subjects.ToList();
 
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Student obj)
+        public IActionResult Create(Student student, List<int> SelectedSubjects)
         {
-            _context.students.Add(obj);
-            _context.SaveChanges();
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                // Add student to the database
+                _context.Students.Add(student);
+                _context.SaveChanges();
+
+                // Link student with selected subjects
+                foreach (var subjectId in SelectedSubjects)
+                {
+                    var studentSubject = new StudentSubject
+                    {
+                        StudentID = student.StudentID,
+                        SubjectID = subjectId
+                    };
+                    _context.StudentSubjects.Add(studentSubject);
+                }
+
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.Subjects = _context.Subjects.ToList();
+            return View(student);
 
         }
     }

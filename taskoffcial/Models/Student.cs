@@ -6,7 +6,7 @@ namespace taskoffcial.Models
     {
         [Key]
         [Display(Name ="ID")]
-        public int? StudentID { get; set; }
+        public int StudentID { get; set; }
 
         [Required]
         [Display (Name ="stdName")]
@@ -24,8 +24,8 @@ namespace taskoffcial.Models
         [Display (Name ="AD")]
         public string  Adress { get; set; }
 
-       /* [Required]
-        [Display(Name = "sub")]
-        public string Subject { get; set; }*/
+        public List<int> SelectedSubjectIds { get; set; }
+        public ICollection<StudentSubject> StudentSubjects { get; set; } = new List<StudentSubject>();
+       
     }
 }
