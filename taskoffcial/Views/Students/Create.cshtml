@@ -13,49 +13,49 @@
     <div class="col-md-4">
         <form asp-action="Create" id="studentForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="StudentID" class="control-label"></label>
-                <input asp-for="StudentID" class="form-control" readonly/>
-                <span asp-validation-for="StudentID" class="text-danger"></span>
-            </div>
+
             <div class="form-group">
                 <label asp-for="StudentName" class="control-label"></label>
-                <input asp-for="@Model.StudentName" class="form-control" id="StudentName" />
+                <input asp-for="StudentName" class="form-control" id="StudentName" />
                 <span asp-validation-for="StudentName" class="text-danger" id="nameError"></span>
-
             </div>
+
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
-                <input asp-for="@Model.Email" class="form-control" id="Email" />
+                <input asp-for="Email" class="form-control" id="Email" />
                 <span asp-validation-for="Email" class="text-danger" id="emailError"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="birthDay" class="control-label"></label>
-                <input asp-for="@Model.birthDay" class="form-control" id="birthDay" />
+                <input asp-for="birthDay" class="form-control" id="birthDay" />
                 <span asp-validation-for="birthDay" class="text-danger" id="dobError"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="Adress" class="control-label"></label>
-                <input asp-for="@Model.Adress" class="form-control"  />
-                <span asp-validation-for="Adress" class="text-danger"></span>
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label for="SelectedSubjects">Select Subjects</label>
-                <select name="SelectedSubjects" class="form-control" multiple>
-                    @foreach (var subject in ViewBag.Subjects)
-                    {
-                        <option value="@subject.SubjectID">@subject.SubjectName</option>
-                    }
-                </select>
+                <label>Select Subjects</label>
+                @foreach (var subject in ViewBag.Subjects)
+                {
+                    <div class="form-check">
+                        <input type="checkbox" name="SelectedSubjectIds" value="@subject.SubjectID" class="form-check-input subject-checkbox" />
+                        <label class="form-check-label" for="subject-@subject.SubjectID">@subject.SubjectName</label>
+                    </div>
+                }
             </div>
+            <div id="subjectError" class="text-danger"></div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
-       
-
-
     </div>
+
 </div>
 
 <div>
@@ -63,61 +63,72 @@
 </div>
 
 @section Scripts {
- @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 
     <script>
         document.getElementById("studentForm").addEventListener("submit", function (e) {
             let isValid = true;
 
-            
+
             const name = document.getElementById("StudentName").value;
             const nameError = document.getElementById("nameError");
-            
 
-             if (/[0-9!#$%^&*(),.?":{}|<>]/g.test(name)) {
+
+            if (/[0-9!#$%^&*(),.?":{}|<>]/g.test(name)) {
                 alert("Name contains numbers and special characters.");
-                nameError.textContent = "Name contains numbers and special characters.";
-                nameError.style.color = "red"; 
                 isValid = false;
             } else if (name.trim() === "") {
                 alert("Name cannot be empty.");
-                nameError.textContent = "Name cannot be empty.";
-                nameError.style.color = "red"; 
+
                 isValid = false;
-            } else {
-                nameError.textContent = "Name is valid.";
-                nameError.style.color = "green"; 
-            }
+            } 
             const email = document.getElementById("Email").value;
             const emailError = document.getElementById("emailError");
             const emailPattern = /^[^\s+^\s]+\.[^\s]+$/;
             if (!emailPattern.test(email)) {
                 alert("Invalid email format.");
-                emailError.textContent = "Invalid email format.";
-                emailError.style.color = "red";
+
                 isValid = false;
-            } else {
-                emailError.textContent = "Email is valid.";
-                emailError.style.color = "green";
             }
 
-           
+
             const dob = new Date(document.getElementById("birthDay").value);
             const dobError = document.getElementById("dobError");
             const age = new Date().getFullYear() - dob.getFullYear();
             if (age < 15) {
                 alert("Student must be at least 15 years old.");
-                dobError.textContent = "Student must be at least 15 years old.";
-                dobError.style.color = "red";
+                
                 isValid = false;
-            } else {
-                dobError.textContent = "Date of birth is valid.";
-                dobError.style.color = "green";
-            }
-            // If validation fails, prevent form submission
+            } 
+            
             if (!isValid) {
                 e.preventDefault();
             }
         });
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            const checkboxes = document.querySelectorAll('.subject-checkbox');
+            const errorElement = document.getElementById('subjectError');
+
+            checkboxes.forEach(function (checkbox) {
+                checkbox.addEventListener('change', function () {
+                    
+                    const checkedCheckboxes = document.querySelectorAll('.subject-checkbox:checked');
+
+                    
+                    if (checkedCheckboxes.length > 2) {
+                        
+                        checkbox.checked = false;
+                        errorElement.innerHTML = "You can select up to 2 subjects only.";
+                    } else {
+                        
+                        errorElement.innerHTML = "";
+                    }
+                });
+            });
+        });
     </script>
+
 }

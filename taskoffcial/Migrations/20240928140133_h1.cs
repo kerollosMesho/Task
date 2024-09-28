@@ -1,25 +1,29 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace taskoffcial.Migrations
 {
-    public partial class e1 : Migration
+    public partial class h1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_Student",
-                table: "Student");
-
-            migrationBuilder.RenameTable(
-                name: "Student",
-                newName: "Students");
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_Students",
-                table: "Students",
-                column: "StudentID");
+            migrationBuilder.CreateTable(
+                name: "Students",
+                columns: table => new
+                {
+                    StudentID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StudentName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    birthDay = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Students", x => x.StudentID);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Subjects",
@@ -58,6 +62,18 @@ namespace taskoffcial.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Subjects",
+                columns: new[] { "SubjectID", "SubjectName" },
+                values: new object[,]
+                {
+                    { 1, "Arabic" },
+                    { 2, "English" },
+                    { 3, "Math" },
+                    { 4, "Science" },
+                    { 5, "History" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_StudentSubjects_SubjectID",
                 table: "StudentSubjects",
@@ -70,20 +86,10 @@ namespace taskoffcial.Migrations
                 name: "StudentSubjects");
 
             migrationBuilder.DropTable(
+                name: "Students");
+
+            migrationBuilder.DropTable(
                 name: "Subjects");
-
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_Students",
-                table: "Students");
-
-            migrationBuilder.RenameTable(
-                name: "Students",
-                newName: "Student");
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_Student",
-                table: "Student",
-                column: "StudentID");
         }
     }
 }

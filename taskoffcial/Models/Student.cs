@@ -5,27 +5,26 @@ namespace taskoffcial.Models
     public class Student
     {
         [Key]
-        [Display(Name ="ID")]
+        [Display(Name = "ID")]
         public int StudentID { get; set; }
 
         [Required]
-        [Display (Name ="stdName")]
-        public String StudentName { get; set; }
-        
-        [Required]
-        [Display (Name ="em")]
-        public String Email { get; set; }
+        [Display(Name = "Student Name")]
+        public string StudentName { get; set; }
 
-     [Display (Name ="Birth date")]
+        [Required]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Display(Name = "Birth date")]
         [DataType(DataType.Date)]
         public DateTime? birthDay { get; set; }
-       
-       [Required]
-        [Display (Name ="AD")]
-        public string  Adress { get; set; }
 
-        public List<int> SelectedSubjectIds { get; set; }
+        [Required]
+        [Display(Name = "Address")]
+        public string Address { get; set; }
+
         public ICollection<StudentSubject> StudentSubjects { get; set; } = new List<StudentSubject>();
-       
+
     }
 }

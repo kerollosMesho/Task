@@ -32,7 +32,7 @@ namespace taskoffcial.Data
                 .HasOne(ss => ss.Subject)
                 .WithMany(s => s.StudentSubjects)
                 .HasForeignKey(ss => ss.SubjectID);
-            // modelBuilder.Entity<Student>().ToTable(nameof(Student));        
+                  
 
         }
         public DbSet<Student> Students { get; set; }

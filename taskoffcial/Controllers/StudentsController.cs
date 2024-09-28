@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using taskoffcial.Data;
 using taskoffcial.Models;
 
@@ -14,7 +15,12 @@ namespace taskoffcial.Controllers
         }
         public IActionResult Index()
         {
-            var result = _context.Students.ToList();
+          
+            var result = _context.Students
+                .Include(s => s.StudentSubjects)
+                .ThenInclude(ss => ss.Subject)
+                .ToList();
+
             return View(result);
         }
         public IActionResult Create()
@@ -24,16 +30,16 @@ namespace taskoffcial.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Student student, List<int> SelectedSubjects)
+        public IActionResult Create(Student student, List<int> SelectedSubjectIds)
         {
             if (ModelState.IsValid)
             {
-                // Add student to the database
+                
                 _context.Students.Add(student);
                 _context.SaveChanges();
 
-                // Link student with selected subjects
-                foreach (var subjectId in SelectedSubjects)
+               
+                foreach (var subjectId in SelectedSubjectIds)
                 {
                     var studentSubject = new StudentSubject
                     {

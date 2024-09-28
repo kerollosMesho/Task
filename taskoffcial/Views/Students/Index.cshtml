@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Students</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -25,36 +25,43 @@
                 @Html.DisplayNameFor(model => model.birthDay)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Adress)
+                @Html.DisplayNameFor(model => model.Address)
             </th>
-            <th></th>
+            <th>Subjects</th>
+           
         </tr>
-    </thead> 
+    </thead>
 
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.StudentID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StudentName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.birthDay)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Adress)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StudentID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StudentName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.birthDay)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    <!-- Loop through the related subjects -->
+                    @foreach (var studentSubject in item.StudentSubjects)
+                    {
+                        <span>@studentSubject.Subject.SubjectName</span>
+
+                        <br />
+                    }
+                </td>
+                
+            </tr>
+        }
     </tbody>
 </table>

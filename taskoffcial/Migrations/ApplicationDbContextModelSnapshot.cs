@@ -30,7 +30,7 @@ namespace taskoffcial.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudentID"), 1L, 1);
 
-                    b.Property<string>("Adress")
+                    b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -80,6 +80,33 @@ namespace taskoffcial.Migrations
                     b.HasKey("SubjectID");
 
                     b.ToTable("Subjects");
+
+                    b.HasData(
+                        new
+                        {
+                            SubjectID = 1,
+                            SubjectName = "Arabic"
+                        },
+                        new
+                        {
+                            SubjectID = 2,
+                            SubjectName = "English"
+                        },
+                        new
+                        {
+                            SubjectID = 3,
+                            SubjectName = "Math"
+                        },
+                        new
+                        {
+                            SubjectID = 4,
+                            SubjectName = "Science"
+                        },
+                        new
+                        {
+                            SubjectID = 5,
+                            SubjectName = "History"
+                        });
                 });
 
             modelBuilder.Entity("taskoffcial.Models.StudentSubject", b =>
